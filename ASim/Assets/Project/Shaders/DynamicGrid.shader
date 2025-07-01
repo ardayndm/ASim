@@ -1,4 +1,4 @@
-Shader "Custom/DynamicGrid"
+Shader "Custom/DynamicGrid_AlwaysVisible"
 {
     Properties
     {
@@ -8,7 +8,7 @@ Shader "Custom/DynamicGrid"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
+        Tags { "RenderType"="Opaque" }
         LOD 100
 
         Pass
@@ -25,7 +25,6 @@ Shader "Custom/DynamicGrid"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
             };
 
             struct v2f
@@ -44,33 +43,25 @@ Shader "Custom/DynamicGrid"
 
             float GridLine(float coord, float thickness)
             {
-                // coord in [0..1] range, line centered at 0.5
-                float dist = abs(frac(coord) - 0.5);
-                float edge = thickness * 0.5;
-                return smoothstep(edge, 0.0, dist);
+                float d = abs(frac(coord) - 0.5);
+                return smoothstep(thickness, 0.0, d);
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // World position X and Y
-                float2 worldXY = i.worldPos.xy;
+                float2 coord = i.worldPos.xy / _CellSize;
 
-                // Normalize world coords by cell size
-                float2 coord = worldXY / _CellSize;
+                // 📌 Çizgi kalınlığını sabit tut, minimuma sabitle
+                float thickness = max(_LineThickness, 0.005); // Çok küçük olursa görünmez
 
-                // Calculate line intensities for X and Y
-                float lineX = GridLine(coord.x, _LineThickness);
-                float lineY = GridLine(coord.y, _LineThickness);
+                float lineX = GridLine(coord.x, thickness);
+                float lineY = GridLine(coord.y, thickness);
+                float gridLine = max(lineX, lineY);
 
-                // Combine lines (max to get crossing lines)
-                float lineIntensity = max(lineX, lineY);
-
-                // Final color with alpha based on line intensity
                 fixed4 col = _GridColor;
-                col.a *= lineIntensity;
+                col.a *= gridLine;
 
-                // Discard pixels with low alpha for transparency
-                clip(col.a - 0.01);
+                clip(col.a - 0.01); // saydam alanları kırp
 
                 return col;
             }
