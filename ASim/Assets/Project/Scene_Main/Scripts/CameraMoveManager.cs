@@ -3,15 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Kamera sürükleme (pan) ve zoom (scroll) işlemlerini yönetir.
-/// Dış müdahaleler için LockCameraList ile kilit kontrolü sağlar.
-/// </summary>
 public class CameraMoveManager : MonoBehaviour
 {
-    /// <summary>
-    /// Kamera kilidini kimin koyduğunu ve nereden koyduğunu belirten yapı.
-    /// </summary>
+    /// <summary> Kamera hareket kilit bilgisini tutar. </summary>
     public struct CameraLocker
     {
         public object locker;
@@ -24,20 +18,13 @@ public class CameraMoveManager : MonoBehaviour
         }
     }
 
-    [Header("Ana Kamera")]
-    [Tooltip("Sürükleme ve zoom yapılacak ana kamera referansı")]
+    [Header("Camera")]
     public Camera MainCamera;
 
-    [Header("Zoom Ayarları")]
-    [Tooltip("Minimum zoom değeri")]
+    [Header("Zoom Settings")]
     [SerializeField] private float minZoom = 1f;
-
-    [Tooltip("Maksimum zoom değeri")]
     [SerializeField] private float maxZoom = 100f;
-
-    [Tooltip("Zoom hızı çarpanı")]
     [SerializeField] private float zoomSpeed = 0.5f;
-
     [SerializeField] private float defaultZoom = 5f;
 
     public Button ZoomInButton;
@@ -50,89 +37,106 @@ public class CameraMoveManager : MonoBehaviour
 
     private Vector3 _dragOrigin;
 
-    /// <summary>
-    /// Kamera hareketini kilitleyen tüm kaynaklar burada tutulur.
-    /// </summary>
-    public static List<CameraLocker> LockCameraList { get; private set; } = new List<CameraLocker>();
+    /// <summary> Aktif kamera kilitleri </summary>
+    public static List<CameraLocker> LockCameraList { get; private set; } = new();
 
     void Start()
     {
         CamInfoHoverHelper.OnHovered += () => LockCamera(gameObject, this);
         CamInfoHoverHelper.OnHoverExit += () => UnlockCamera(gameObject, this);
-        ZoomInButton.onClick.AddListener(() => SetZoomLevel(true));
-        ZoomOutButton.onClick.AddListener(() => SetZoomLevel(false));
-        ResetZoomButton.onClick.AddListener(() => MainCamera.orthographicSize = defaultZoom);
-        ResetPositionButton.onClick.AddListener(() => MainCamera.transform.position = new Vector3(0, 0, -1));
-        ZoomLevelScrollbar.onValueChanged.AddListener((value) => MainCamera.orthographicSize = Mathf.Lerp(minZoom, maxZoom, value));
+
+        ZoomInButton.onClick.AddListener(() => ChangeZoom(true));
+        ZoomOutButton.onClick.AddListener(() => ChangeZoom(false));
+        ResetZoomButton.onClick.AddListener(() => SetZoom(defaultZoom));
+        ResetPositionButton.onClick.AddListener(ResetPosition);
+
+        ZoomLevelScrollbar.onValueChanged.AddListener(value => SetZoom(Mathf.Lerp(minZoom, maxZoom, value)));
     }
 
-    private void Update()
+    void Update()
     {
         if (MainCamera == null) return;
 
-        ZoomLevelScrollbar.SetValueWithoutNotify(Mathf.InverseLerp(minZoom, maxZoom, MainCamera.orthographicSize)); // UI güncellenir ama event tetiklemez
-        ZoomLevelText.text = MainCamera.orthographicSize.ToString("0.0") + 'x';
+        ZoomLevelScrollbar.SetValueWithoutNotify(Mathf.InverseLerp(minZoom, maxZoom, MainCamera.orthographicSize));
+        ZoomLevelText.text = $"{MainCamera.orthographicSize:0.0}x";
+
         if (LockCameraList.Count > 0) return;
 
-        HandleMousePan();
-        HandleMouseScroll();
+        HandlePan();
+        HandleScrollZoom();
     }
 
-    public void SetZoomLevel(bool isZoomIn)
+    /// <summary>
+    /// Zoomu arttırır veya azaltır.
+    /// </summary>
+    /// <param name="zoomIn">True ise zoom in, false ise zoom out</param>
+    private void ChangeZoom(bool zoomIn)
     {
-        float targetSize = MainCamera.orthographicSize + (isZoomIn ? -5 : 5);
-        MainCamera.orthographicSize = Mathf.Clamp(targetSize, minZoom, maxZoom);
+        float delta = zoomIn ? -5f : 5f;
+        SetZoom(MainCamera.orthographicSize + delta);
     }
 
-    private void HandleMouseScroll()
+    /// <summary>
+    /// Zoom seviyesini sınırlar ve ayarlar.
+    /// </summary>
+    private void SetZoom(float size)
+    {
+        MainCamera.orthographicSize = Mathf.Clamp(size, minZoom, maxZoom);
+    }
+
+    /// <summary>
+    /// Kamerayı varsayılan pozisyona sıfırlar.
+    /// </summary>
+    private void ResetPosition()
+    {
+        MainCamera.transform.position = new Vector3(0, 0, -1);
+    }
+
+    /// <summary>
+    /// Fare tekerleği ile zoom kontrolü yapar.
+    /// </summary>
+    private void HandleScrollZoom()
     {
         float scroll = InputActionManager.InputActionsMap.Mouse.MouseScroll.ReadValue<float>();
-        float shift = InputActionManager.InputActionsMap.Keys.LShift.IsPressed() ? 10f : 1f;
-        float targetSize = MainCamera.orthographicSize + scroll * zoomSpeed * shift;
-        MainCamera.orthographicSize = Mathf.Clamp(targetSize, minZoom, maxZoom);
+        float speed = InputActionManager.InputActionsMap.Keys.LShift.IsPressed() ? 10f : 1f;
+        SetZoom(MainCamera.orthographicSize + scroll * zoomSpeed * speed);
     }
 
-    private void HandleMousePan()
+    /// <summary>
+    /// Kamera sürükleme işlemini yönetir.
+    /// </summary>
+    private void HandlePan()
     {
-        var mouseInput = InputActionManager.InputActionsMap.Mouse.MouseScrollPress;
+        var mousePressed = InputActionManager.InputActionsMap.Mouse.MouseScrollPress;
 
-        if (mouseInput.WasPressedThisFrame())
-        {
+        if (mousePressed.WasPressedThisFrame())
             _dragOrigin = MainCamera.ScreenToWorldPoint(Input.mousePosition);
-        }
 
-        if (mouseInput.IsPressed())
+        if (mousePressed.IsPressed())
         {
-            Vector3 currentPosition = MainCamera.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 delta = _dragOrigin - currentPosition;
+            Vector3 currentPos = MainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 delta = _dragOrigin - currentPos;
             MainCamera.transform.position += delta;
         }
     }
 
     /// <summary>
-    /// Kamera hareketini kilitler.
-    /// Aynı objeden birden fazla kilit varsa yine de sadece bir tane eklenir.
+    /// Kamerayı kilitler, aynı kilit birden eklenmez.
     /// </summary>
-    /// <param name="lockedFrom">Kilidin geldiği GameObject</param>
-    /// <param name="locker">Kim tarafından kilitlendiği</param>
     public static void LockCamera(GameObject lockedFrom, object locker)
     {
         if (lockedFrom == null || locker == null) return;
 
         foreach (var item in LockCameraList)
-        {
             if (item.lockedFrom == lockedFrom && item.locker == locker)
-                return; // zaten eklenmiş
-        }
+                return;
 
         LockCameraList.Add(new CameraLocker(lockedFrom, locker));
     }
 
     /// <summary>
-    /// Kamera kilidini kaldırır.
+    /// Kameranın kilidini kaldırır.
     /// </summary>
-    /// <param name="lockedFrom">Kilidin geldiği GameObject</param>
-    /// <param name="locker">Kim tarafından kilitlendiği</param>
     public static void UnlockCamera(GameObject lockedFrom, object locker)
     {
         if (lockedFrom == null || locker == null) return;
