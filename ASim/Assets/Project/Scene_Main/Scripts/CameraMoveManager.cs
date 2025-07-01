@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Kamera sürükleme (pan) ve zoom (scroll) işlemlerini yönetir.
@@ -36,6 +38,16 @@ public class CameraMoveManager : MonoBehaviour
     [Tooltip("Zoom hızı çarpanı")]
     [SerializeField] private float zoomSpeed = 0.5f;
 
+    [SerializeField] private float defaultZoom = 5f;
+
+    public Button ZoomInButton;
+    public Button ZoomOutButton;
+    public Button ResetZoomButton;
+    public Button ResetPositionButton;
+    public TextMeshProUGUI ZoomLevelText;
+    public Scrollbar ZoomLevelScrollbar;
+    public UIHoverHelper CamInfoHoverHelper;
+
     private Vector3 _dragOrigin;
 
     /// <summary>
@@ -43,13 +55,33 @@ public class CameraMoveManager : MonoBehaviour
     /// </summary>
     public static List<CameraLocker> LockCameraList { get; private set; } = new List<CameraLocker>();
 
+    void Start()
+    {
+        CamInfoHoverHelper.OnHovered += () => LockCamera(gameObject, this);
+        CamInfoHoverHelper.OnHoverExit += () => UnlockCamera(gameObject, this);
+        ZoomInButton.onClick.AddListener(() => SetZoomLevel(true));
+        ZoomOutButton.onClick.AddListener(() => SetZoomLevel(false));
+        ResetZoomButton.onClick.AddListener(() => MainCamera.orthographicSize = defaultZoom);
+        ResetPositionButton.onClick.AddListener(() => MainCamera.transform.position = new Vector3(0, 0, -1));
+        ZoomLevelScrollbar.onValueChanged.AddListener((value) => MainCamera.orthographicSize = Mathf.Lerp(minZoom, maxZoom, value));
+    }
+
     private void Update()
     {
         if (MainCamera == null) return;
+
+        ZoomLevelScrollbar.SetValueWithoutNotify(Mathf.InverseLerp(minZoom, maxZoom, MainCamera.orthographicSize)); // UI güncellenir ama event tetiklemez
+        ZoomLevelText.text = MainCamera.orthographicSize.ToString("0.0") + 'x';
         if (LockCameraList.Count > 0) return;
 
         HandleMousePan();
         HandleMouseScroll();
+    }
+
+    public void SetZoomLevel(bool isZoomIn)
+    {
+        float targetSize = MainCamera.orthographicSize + (isZoomIn ? -5 : 5);
+        MainCamera.orthographicSize = Mathf.Clamp(targetSize, minZoom, maxZoom);
     }
 
     private void HandleMouseScroll()

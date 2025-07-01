@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 3856249162717929089}
   - component: {fileID: 6485310039911119771}
   - component: {fileID: 8614476270454311904}
+  - component: {fileID: 5605626406086255264}
   m_Layer: 5
   m_Name: Panel_Item_Mask
   m_TagString: Untagged
@@ -210,3 +211,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &5605626406086255264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7377200711025502470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fee0ee554d23d6418edd515762ac1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuItemSelfSprite: {fileID: 21300000, guid: 55576f7c5acc3094f9e1e9bc7e714f20, type: 3}
+  MenuItemSelfButton: {fileID: 158008723728096394}
+  MenuItemSelfScriptableObject: {fileID: 0}
