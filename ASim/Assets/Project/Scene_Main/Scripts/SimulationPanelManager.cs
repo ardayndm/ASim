@@ -24,6 +24,7 @@ public class SimulationPanelManager : MonoBehaviour
     public WarnPanelManager WarnPanel;
     public SchemaManager SchemaManager;
     public GameObject ComponentsMenuObject;
+    public UIHoverHelper SimulationPanelHoverHelper;
 
     /// <summary>
     /// Simülasyon durumu (durduruldu veya çalışıyor).
@@ -36,6 +37,16 @@ public class SimulationPanelManager : MonoBehaviour
         StopSimButton.onClick.AddListener(OnStopSimulationButtonClicked);
         ComponentsMenuButton.onClick.AddListener(OnComponentsMenuButtonClicked);
         ClearSchemaButton.onClick.AddListener(OnClearSchemaButtonClicked);
+
+        SimulationPanelHoverHelper.OnHovered += () =>
+        {
+            CameraMoveManager.LockCamera(gameObject, this);
+        };
+
+        SimulationPanelHoverHelper.OnHoverExit += () =>
+        {
+            CameraMoveManager.UnlockCamera(gameObject, this);
+        };
 
         // Başlangıçta simülasyon durdurulmuş, buna göre buton ayarı:
         UpdateUIState();

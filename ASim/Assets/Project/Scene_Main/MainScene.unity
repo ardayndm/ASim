@@ -3487,6 +3487,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 795676035}
+  minZoom: 1
+  maxZoom: 100
+  zoomSpeed: 0.5
 --- !u!1 &842804399
 GameObject:
   m_ObjectHideFlags: 0
@@ -3946,6 +3949,7 @@ GameObject:
   - component: {fileID: 1021267066}
   - component: {fileID: 1021267065}
   - component: {fileID: 1021267067}
+  - component: {fileID: 1021267068}
   m_Layer: 5
   m_Name: Panel_Hotbar
   m_TagString: Untagged
@@ -4030,6 +4034,19 @@ MonoBehaviour:
   HotbarItemsContentObject: {fileID: 577116988}
   ClearHotbarButton: {fileID: 468699765}
   HotbarItemPrefab: {fileID: 4976664324726279912, guid: 6baef11d090ac9046b2e0771019daa73, type: 3}
+  HotbarPanelHoverHelper: {fileID: 1021267068}
+--- !u!114 &1021267068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021267063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c23a23bc4724d44c905129040f7cb1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1036262739
 GameObject:
   m_ObjectHideFlags: 0

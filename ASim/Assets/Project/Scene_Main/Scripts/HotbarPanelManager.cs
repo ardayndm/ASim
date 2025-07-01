@@ -25,6 +25,9 @@ public class HotbarPanelManager : MonoBehaviour
     [Tooltip("Hotbar item prefabı")]
     public GameObject HotbarItemPrefab;
 
+    [Tooltip("Tüm hotbar alanın hover helperi")]
+    public UIHoverHelper HotbarPanelHoverHelper;
+
     /// <summary>
     /// Hotbarda aktif olan itemların listesi
     /// </summary>
@@ -32,8 +35,19 @@ public class HotbarPanelManager : MonoBehaviour
 
     private void Start()
     {
-        if (ClearHotbarButton != null)
-            ClearHotbarButton.onClick.AddListener(ClearHotbarItemsOnClick);
+        ClearHotbarButton.onClick.AddListener(ClearHotbarItemsOnClick);
+        HotbarPanelHoverHelper.OnHovered += HotbarPanelOnHovered;
+        HotbarPanelHoverHelper.OnHoverExit += HotbarPanelOnHoverExit;
+    }
+
+    private void HotbarPanelOnHoverExit()
+    {
+        CameraMoveManager.UnlockCamera(gameObject, this);
+    }
+
+    private void HotbarPanelOnHovered()
+    {
+        CameraMoveManager.LockCamera(gameObject, this);
     }
 
     /// <summary>

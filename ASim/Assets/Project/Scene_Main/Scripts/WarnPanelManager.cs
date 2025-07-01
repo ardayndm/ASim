@@ -39,15 +39,17 @@ public class WarnPanelManager : MonoBehaviour
 
     private void Start()
     {
-        if (OkButton != null)
-            OkButton.onClick.AddListener(() => OkButtonClicked?.Invoke());
-        else
-            Debug.LogWarning("OkButton referansı atanmadı.");
-
-        if (CancelButton != null)
-            CancelButton.onClick.AddListener(() => CancelButtonClicked?.Invoke());
-        else
-            Debug.LogWarning("CancelButton referansı atanmadı.");
+        CameraMoveManager.LockCamera(gameObject, this);
+        OkButton.onClick.AddListener(() =>
+        {
+            OkButtonClicked?.Invoke();
+            CameraMoveManager.UnlockCamera(gameObject, this);
+        });
+        CancelButton.onClick.AddListener(() =>
+        {
+            CancelButtonClicked?.Invoke();
+            CameraMoveManager.UnlockCamera(gameObject, this);
+        });
     }
 
     /// <summary>
