@@ -92,6 +92,34 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Keys"",
+            ""id"": ""3df29773-0faa-47fa-ac4e-6dfe2e6e909d"",
+            ""actions"": [
+                {
+                    ""name"": ""LShift"",
+                    ""type"": ""Button"",
+                    ""id"": ""2ec44e0d-4b9c-4f32-afd7-d37b9b85b610"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""25d63eeb-b09d-4358-84f2-aae58a8e53ba"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LShift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -100,11 +128,15 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_MouseScroll = m_Mouse.FindAction("MouseScroll", throwIfNotFound: true);
         m_Mouse_MouseScrollPress = m_Mouse.FindAction("MouseScrollPress", throwIfNotFound: true);
+        // Keys
+        m_Keys = asset.FindActionMap("Keys", throwIfNotFound: true);
+        m_Keys_LShift = m_Keys.FindAction("LShift", throwIfNotFound: true);
     }
 
     ~@InputActionsMap()
     {
         UnityEngine.Debug.Assert(!m_Mouse.enabled, "This will cause a leak and performance issues, InputActionsMap.Mouse.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Keys.enabled, "This will cause a leak and performance issues, InputActionsMap.Keys.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -216,9 +248,59 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
         }
     }
     public MouseActions @Mouse => new MouseActions(this);
+
+    // Keys
+    private readonly InputActionMap m_Keys;
+    private List<IKeysActions> m_KeysActionsCallbackInterfaces = new List<IKeysActions>();
+    private readonly InputAction m_Keys_LShift;
+    public struct KeysActions
+    {
+        private @InputActionsMap m_Wrapper;
+        public KeysActions(@InputActionsMap wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LShift => m_Wrapper.m_Keys_LShift;
+        public InputActionMap Get() { return m_Wrapper.m_Keys; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(KeysActions set) { return set.Get(); }
+        public void AddCallbacks(IKeysActions instance)
+        {
+            if (instance == null || m_Wrapper.m_KeysActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_KeysActionsCallbackInterfaces.Add(instance);
+            @LShift.started += instance.OnLShift;
+            @LShift.performed += instance.OnLShift;
+            @LShift.canceled += instance.OnLShift;
+        }
+
+        private void UnregisterCallbacks(IKeysActions instance)
+        {
+            @LShift.started -= instance.OnLShift;
+            @LShift.performed -= instance.OnLShift;
+            @LShift.canceled -= instance.OnLShift;
+        }
+
+        public void RemoveCallbacks(IKeysActions instance)
+        {
+            if (m_Wrapper.m_KeysActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IKeysActions instance)
+        {
+            foreach (var item in m_Wrapper.m_KeysActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_KeysActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public KeysActions @Keys => new KeysActions(this);
     public interface IMouseActions
     {
         void OnMouseScroll(InputAction.CallbackContext context);
         void OnMouseScrollPress(InputAction.CallbackContext context);
+    }
+    public interface IKeysActions
+    {
+        void OnLShift(InputAction.CallbackContext context);
     }
 }

@@ -70,6 +70,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Keys",
+            "id": "3df29773-0faa-47fa-ac4e-6dfe2e6e909d",
+            "actions": [
+                {
+                    "name": "LShift",
+                    "type": "Button",
+                    "id": "2ec44e0d-4b9c-4f32-afd7-d37b9b85b610",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "25d63eeb-b09d-4358-84f2-aae58a8e53ba",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LShift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

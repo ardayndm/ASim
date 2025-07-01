@@ -55,7 +55,8 @@ public class CameraMoveManager : MonoBehaviour
     private void HandleMouseScroll()
     {
         float scroll = InputActionManager.InputActionsMap.Mouse.MouseScroll.ReadValue<float>();
-        float targetSize = MainCamera.orthographicSize + scroll * zoomSpeed;
+        float shift = InputActionManager.InputActionsMap.Keys.LShift.IsPressed() ? 10f : 1f;
+        float targetSize = MainCamera.orthographicSize + scroll * zoomSpeed * shift;
         MainCamera.orthographicSize = Mathf.Clamp(targetSize, minZoom, maxZoom);
     }
 

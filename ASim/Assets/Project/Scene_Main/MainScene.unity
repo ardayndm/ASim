@@ -3824,6 +3824,7 @@ GameObject:
   - component: {fileID: 913289908}
   - component: {fileID: 913289910}
   - component: {fileID: 913289911}
+  - component: {fileID: 913289912}
   m_Layer: 5
   m_Name: Panel_Simulation
   m_TagString: Untagged
@@ -3937,6 +3938,19 @@ MonoBehaviour:
   WarnPanel: {fileID: 668237984}
   SchemaManager: {fileID: 1589748777}
   ComponentsMenuObject: {fileID: 1784804932}
+  SimulationPanelHoverHelper: {fileID: 913289912}
+--- !u!114 &913289912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913289906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c23a23bc4724d44c905129040f7cb1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1021267063
 GameObject:
   m_ObjectHideFlags: 0
