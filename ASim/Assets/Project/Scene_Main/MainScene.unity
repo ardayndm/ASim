@@ -6738,7 +6738,7 @@ GameObject:
   - component: {fileID: 1909805766}
   - component: {fileID: 1909805765}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: GridCenterMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
