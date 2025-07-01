@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8991357907278259486}
   - component: {fileID: 5348839032443973042}
   - component: {fileID: 8706731695960267977}
+  - component: {fileID: 2163329247522953877}
   m_Layer: 5
-  m_Name: LastUsedItemPanel
+  m_Name: HotbarItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,6 +123,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2163329247522953877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4976664324726279912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35ea4d1e26d8a7846965d958a262ff34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HotbarItemSelfImage: {fileID: 1036836386379287788}
+  HotbarItemSelfName: {fileID: 3070647814167058463}
+  HotbarItemSelfButton: {fileID: 8706731695960267977}
 --- !u!1 &8744135002324022864
 GameObject:
   m_ObjectHideFlags: 0
