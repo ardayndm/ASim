@@ -19,13 +19,13 @@ public class CameraMoveManager : MonoBehaviour
     void HandleMousePan()
     {
         // Mouse ile pan başlat
-        if (Input.GetMouseButtonDown(0))
+        if (InputActionManager.InputActionsMap.Mouse.MouseScrollPress.WasPressedThisFrame())
         {
             _dragOrigin = MainCamera.ScreenToWorldPoint(Input.mousePosition);
         }
 
         // Sürükleme işlemi
-        if (Input.GetMouseButton(0))
+        if (InputActionManager.InputActionsMap.Mouse.MouseScrollPress.IsPressed())
         {
             Vector3 difference = _dragOrigin - MainCamera.ScreenToWorldPoint(Input.mousePosition);
             MainCamera.transform.position += difference;

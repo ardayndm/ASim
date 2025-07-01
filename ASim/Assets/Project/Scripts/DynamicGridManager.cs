@@ -6,7 +6,9 @@ public class DynamicGridManager : MonoBehaviour
     public Material DynamicGridMaterial;
     public GameObject GridObject;
     public Color GridColor = Color.white;
+    public GameObject OriginMarkerObject;
     [Min(0.01f)] public float GridThickness = 0.01f;
+    [Min(0.01f)] public float OriginMarkerSize = 1f;
 
     // Önceki değerleri tut
     private float _gridCellSize;
@@ -44,6 +46,7 @@ public class DynamicGridManager : MonoBehaviour
 
         if (!changed) return;
 
+        OriginMarkerObject.transform.localScale = new Vector3(_gridCellSize * OriginMarkerSize, _gridCellSize * OriginMarkerSize, 0f);
         DynamicGridMaterial.SetFloat("_CellSize", _gridCellSize);
         DynamicGridMaterial.SetColor("_GridColor", GridColor);
         DynamicGridMaterial.SetFloat("_LineThickness", GridThickness);

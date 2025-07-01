@@ -35,6 +35,15 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MouseScrollPress"",
+                    ""type"": ""Button"",
+                    ""id"": ""89c08f17-0d48-4bbe-9aef-e2cede849872"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -70,6 +79,17 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
                     ""action"": ""MouseScroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""277e7d88-115b-4dc9-9dc5-ed59ba7d98bb"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScrollPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -79,6 +99,7 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_MouseScroll = m_Mouse.FindAction("MouseScroll", throwIfNotFound: true);
+        m_Mouse_MouseScrollPress = m_Mouse.FindAction("MouseScrollPress", throwIfNotFound: true);
     }
 
     ~@InputActionsMap()
@@ -146,11 +167,13 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Mouse;
     private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
     private readonly InputAction m_Mouse_MouseScroll;
+    private readonly InputAction m_Mouse_MouseScrollPress;
     public struct MouseActions
     {
         private @InputActionsMap m_Wrapper;
         public MouseActions(@InputActionsMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @MouseScroll => m_Wrapper.m_Mouse_MouseScroll;
+        public InputAction @MouseScrollPress => m_Wrapper.m_Mouse_MouseScrollPress;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -163,6 +186,9 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
             @MouseScroll.started += instance.OnMouseScroll;
             @MouseScroll.performed += instance.OnMouseScroll;
             @MouseScroll.canceled += instance.OnMouseScroll;
+            @MouseScrollPress.started += instance.OnMouseScrollPress;
+            @MouseScrollPress.performed += instance.OnMouseScrollPress;
+            @MouseScrollPress.canceled += instance.OnMouseScrollPress;
         }
 
         private void UnregisterCallbacks(IMouseActions instance)
@@ -170,6 +196,9 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
             @MouseScroll.started -= instance.OnMouseScroll;
             @MouseScroll.performed -= instance.OnMouseScroll;
             @MouseScroll.canceled -= instance.OnMouseScroll;
+            @MouseScrollPress.started -= instance.OnMouseScrollPress;
+            @MouseScrollPress.performed -= instance.OnMouseScrollPress;
+            @MouseScrollPress.canceled -= instance.OnMouseScrollPress;
         }
 
         public void RemoveCallbacks(IMouseActions instance)
@@ -190,5 +219,6 @@ public partial class @InputActionsMap: IInputActionCollection2, IDisposable
     public interface IMouseActions
     {
         void OnMouseScroll(InputAction.CallbackContext context);
+        void OnMouseScrollPress(InputAction.CallbackContext context);
     }
 }
