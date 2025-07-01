@@ -5,17 +5,21 @@ public class DynamicGridManager : MonoBehaviour
     public Camera MainCamera;
     public Material DynamicGridMaterial;
     public GameObject GridObject;
-
-    [Min(0.01f)] public float GridCellSize = 1.0f;
     public Color GridColor = Color.white;
     [Min(0.01f)] public float GridThickness = 0.01f;
 
     // Önceki değerleri tut
+    private float _gridCellSize;
     private float prevCellSize;
     private Color prevGridColor;
     private float prevGridThickness;
 
     private void Start()
+    {
+        UpdateShaderProperties(forceUpdate: true);
+    }
+
+    private void OnValidate()
     {
         UpdateShaderProperties(forceUpdate: true);
     }
@@ -31,20 +35,20 @@ public class DynamicGridManager : MonoBehaviour
 
     void UpdateShaderProperties(bool forceUpdate = false)
     {
-        GridCellSize = GridManager.GetGridCellSize(MainCamera.orthographicSize);
-        
+        _gridCellSize = GridManager.GetGridCellSize(MainCamera.orthographicSize);
+
         bool changed = forceUpdate ||
-         GridCellSize != prevCellSize ||
+        _gridCellSize != prevCellSize ||
           GridColor != prevGridColor ||
            GridThickness != prevGridThickness;
 
         if (!changed) return;
 
-        DynamicGridMaterial.SetFloat("_CellSize", GridCellSize);
+        DynamicGridMaterial.SetFloat("_CellSize", _gridCellSize);
         DynamicGridMaterial.SetColor("_GridColor", GridColor);
         DynamicGridMaterial.SetFloat("_LineThickness", GridThickness);
 
-        prevCellSize = GridCellSize;
+        prevCellSize = _gridCellSize;
         prevGridColor = GridColor;
         prevGridThickness = GridThickness;
     }

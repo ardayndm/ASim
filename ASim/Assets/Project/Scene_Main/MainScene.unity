@@ -222,9 +222,8 @@ MonoBehaviour:
   MainCamera: {fileID: 795676035}
   DynamicGridMaterial: {fileID: 2100000, guid: a1c3149fde8c0794188bddb491229388, type: 2}
   GridObject: {fileID: 429403950}
-  GridCellSize: 2
-  GridColor: {r: 1, g: 1, b: 1, a: 1}
-  GridThickness: 0.01
+  GridColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+  GridThickness: 0.025
 --- !u!1 &795676033
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,8 +261,8 @@ Camera:
   m_GameObject: {fileID: 795676033}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
