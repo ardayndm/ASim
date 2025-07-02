@@ -13,6 +13,8 @@ public class WarnPanelManager : MonoBehaviour
     [SerializeField] private Button OkButton;
     [SerializeField] private Button CancelButton;
 
+    public static WarnPanelManager Instance { get; private set; }
+
     /// <summary>
     /// Uyarı mesajının ok butonuna tıklandıgında tetiklenen event. (GameObject Disable olunca abonelikler silinir.)
     /// </summary>
@@ -22,6 +24,8 @@ public class WarnPanelManager : MonoBehaviour
     /// Uyarı mesajının iptal butonuna tıklandıgında tetiklenen event. (GameObject Disable olunca abonelikler silinir.)
     /// </summary>
     public event Action CancelButtonClicked;
+
+    void Awake() => Instance = this;
 
     private void Start()
     {

@@ -3017,14 +3017,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 626539685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aef4a360789cf3347a4f7e35213990cd, type: 3}
+  m_Script: {fileID: 11500000, guid: d4135c13b4de99f4f883215d5eb85d3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DrawingItemImage: {fileID: 1064732003}
-  DrawModeImage: {fileID: 1243911404}
+  DrawingItemImg: {fileID: 1064732003}
+  DrawModeImg: {fileID: 1243911404}
   DrawingSprite: {fileID: 21300000, guid: 1a67663531d8714439bcb505c84c7cb9, type: 3}
-  WaitingForDrawSprite: {fileID: 21300000, guid: 1fe22960214e51544923abeaa1750440, type: 3}
-  NotDrawingSprite: {fileID: 21300000, guid: b7a274b6ad3d2044a9b0a8fb081797ed, type: 3}
+  WaitingSprite: {fileID: 21300000, guid: 1fe22960214e51544923abeaa1750440, type: 3}
 --- !u!1 &644600434
 GameObject:
   m_ObjectHideFlags: 0
@@ -4462,8 +4461,6 @@ MonoBehaviour:
   StopSimButton: {fileID: 1911607420}
   ComponentsMenuButton: {fileID: 1664730413}
   ClearSchemaButton: {fileID: 6596996}
-  WarnPanel: {fileID: 668237984}
-  SchemaManager: {fileID: 1589748777}
   ComponentsMenuObject: {fileID: 1784804932}
   SimulationPanelHoverHelper: {fileID: 913289912}
 --- !u!114 &913289912
@@ -4575,7 +4572,6 @@ MonoBehaviour:
   HotbarItemsContentObject: {fileID: 577116988}
   ClearHotbarButton: {fileID: 468699765}
   HotbarItemPrefab: {fileID: 4976664324726279912, guid: 6baef11d090ac9046b2e0771019daa73, type: 3}
-  WarnPanelManager: {fileID: 668237984}
   HotbarPanelHoverHelper: {fileID: 1021267068}
 --- !u!114 &1021267068
 MonoBehaviour:

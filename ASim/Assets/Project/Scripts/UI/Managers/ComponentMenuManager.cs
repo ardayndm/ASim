@@ -32,23 +32,20 @@ public class ComponentMenuManager : MonoBehaviour
     [SerializeField] private UIHoverHelper menuHoverHelper;
 
     public static List<MenuItem> MenuItems { get; private set; } = new();
+    public static ComponentMenuManager Instance { get; private set; }
+
+    private void Awake() => Instance = this;
 
     private void Start()
     {
         menuHoverHelper.OnHovered += () => CameraManager.LockCamera(gameObject, this);
         menuHoverHelper.OnHoverExit += () => CameraManager.UnlockCamera(gameObject, this);
-        closeMenuButton.onClick.AddListener(CloseMenu);
+        closeMenuButton.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
     private void OnDisable()
     {
         CameraManager.UnlockCamera(gameObject, this);
-    }
-
-    /// <summary> Menüyü kapatır. </summary>
-    private void CloseMenu()
-    {
-        gameObject.SetActive(false);
     }
 
     /// <summary>

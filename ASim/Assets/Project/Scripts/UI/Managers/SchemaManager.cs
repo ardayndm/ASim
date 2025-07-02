@@ -5,7 +5,11 @@ public class SchemaManager : MonoBehaviour
 {
     public static List<GameObject> SchemaObjects = new();
 
+    public static SchemaManager Instance { get; private set; }
+
     public void AddSchemaObject(GameObject obj) => SchemaObjects.Add(obj);
+
+    private void Awake() => Instance = this;
 
     /// <summary>
     /// Tüm şemada bulunan öğeleri siler.

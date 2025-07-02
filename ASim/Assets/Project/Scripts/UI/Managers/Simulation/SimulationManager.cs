@@ -14,8 +14,6 @@ public class SimulationManager : MonoBehaviour
     public Button ClearSchemaButton;
 
     [Header("Bileşenler")]
-    public WarnPanelManager WarnPanel;
-    public SchemaManager SchemaManager;
     public GameObject ComponentsMenuObject;
     public UIHoverHelper SimulationPanelHoverHelper;
 
@@ -56,14 +54,14 @@ public class SimulationManager : MonoBehaviour
 
     private void ConfirmClearSchema()
     {
-        WarnPanel.gameObject.SetActive(true);
-        WarnPanel.SetWarnText("Tüm şema silinecektir. Devam etmek istiyor musunuz?");
-        WarnPanel.OkButtonClicked += () =>
+        WarnPanelManager.Instance.gameObject.SetActive(true);
+        WarnPanelManager.Instance.SetWarnText("Tüm şema silinecektir. Devam etmek istiyor musunuz?");
+        WarnPanelManager.Instance.OkButtonClicked += () =>
         {
-            SchemaManager.ClearAllSchema();
-            WarnPanel.gameObject.SetActive(false);
+            SchemaManager.Instance.ClearAllSchema();
+            WarnPanelManager.Instance.gameObject.SetActive(false);
         };
-        WarnPanel.CancelButtonClicked += () => WarnPanel.gameObject.SetActive(false);
+        WarnPanelManager.Instance.CancelButtonClicked += () => WarnPanelManager.Instance.gameObject.SetActive(false);
     }
 
     private void UpdateUIState()

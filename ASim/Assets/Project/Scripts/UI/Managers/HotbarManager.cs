@@ -14,7 +14,6 @@ public class HotbarManager : MonoBehaviour
     public GameObject HotbarItemsContentObject;
     public Button ClearHotbarButton;
     public GameObject HotbarItemPrefab;
-    public WarnPanelManager WarnPanelManager;
     public UIHoverHelper HotbarPanelHoverHelper;
 
     /// <summary>Aktif hotbar item listesi.</summary>
@@ -30,14 +29,14 @@ public class HotbarManager : MonoBehaviour
 
     private void OnClearButtonClick()
     {
-        WarnPanelManager.gameObject.SetActive(true);
-        WarnPanelManager.SetWarnText("Hotbar temizlenecektir. Devam etmek istiyor musunuz?");
-        WarnPanelManager.OkButtonClicked += () =>
+        WarnPanelManager.Instance.gameObject.SetActive(true);
+        WarnPanelManager.Instance.SetWarnText("Sık kullanılanlar temizlenecektir. Devam etmek istiyor musunuz?");
+        WarnPanelManager.Instance.OkButtonClicked += () =>
         {
             ClearHotbar();
-            WarnPanelManager.gameObject.SetActive(false);
+            WarnPanelManager.Instance.gameObject.SetActive(false);
         };
-        WarnPanelManager.CancelButtonClicked += () => WarnPanelManager.gameObject.SetActive(false);
+        WarnPanelManager.Instance.CancelButtonClicked += () => WarnPanelManager.Instance.gameObject.SetActive(false);
     }
 
     private void OnSimulationStateChanged(SimulationState state)
