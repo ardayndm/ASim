@@ -30,6 +30,7 @@ public class MenuItemSO : ScriptableObject
 
     [Header("Açıklama ve Ek Özellikler")]
     [Tooltip("Item ile ilgili bilgi satırları (tooltips vs.)")]
+    [TextArea(10, 20)]
     public List<string> ItemInfoDescriptions = new();
 
     [Tooltip("Item sahneye eklendiğinde oluşturulacak attribute prefab'ları")]
