@@ -1905,10 +1905,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 795676035}
-  DynamicGridMaterial: {fileID: 2100000, guid: a1c3149fde8c0794188bddb491229388, type: 2}
   GridObject: {fileID: 429403950}
-  GridColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
   OriginMarkerObject: {fileID: 1909805764}
+  DynamicGridMaterial: {fileID: 2100000, guid: a1c3149fde8c0794188bddb491229388, type: 2}
+  GridColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
   GridThickness: 0.025
   OriginMarkerSize: 0.1
 --- !u!1 &461487904
@@ -3763,18 +3763,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8392bed19958f1d4684edb8165894241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainCamera: {fileID: 795676035}
+  mainCamera: {fileID: 795676035}
   minZoom: 1
   maxZoom: 100
   zoomSpeed: 0.5
   defaultZoom: 10
-  ZoomInButton: {fileID: 1067288132}
-  ZoomOutButton: {fileID: 798147993}
-  ResetZoomButton: {fileID: 2099521142}
-  ResetPositionButton: {fileID: 86281442}
-  ZoomLevelText: {fileID: 702375112}
-  ZoomLevelScrollbar: {fileID: 644600436}
-  CamInfoHoverHelper: {fileID: 1036262744}
+  zoomInButton: {fileID: 1067288132}
+  zoomOutButton: {fileID: 798147993}
+  resetZoomButton: {fileID: 2099521142}
+  resetPositionButton: {fileID: 86281442}
+  zoomLevelText: {fileID: 702375112}
+  zoomScrollbar: {fileID: 644600436}
+  hoverHelper: {fileID: 1036262744}
 --- !u!1 &798147991
 GameObject:
   m_ObjectHideFlags: 0
@@ -7600,19 +7600,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1f8484ea6ea284db991fbefc0c7ded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SearchInputField: {fileID: 652595842}
-  ItemsContentObject: {fileID: 1388269558}
-  MainComponentImage: {fileID: 1090008073}
-  SecondComponentImage: {fileID: 261139223}
-  ThirdComponentImage: {fileID: 1813081249}
-  ComponentName: {fileID: 1431582086}
-  ComponentInfoScrollView: {fileID: 548778836}
-  ComponentAttributesScrollView: {fileID: 278548492}
-  ComponentInfoScrollViewContent: {fileID: 1282895956}
-  ComponentAttributesScrollViewContent: {fileID: 116653552}
-  SelectButton: {fileID: 1272145378}
-  CloseMenuButton: {fileID: 604904877}
-  ComponentsMenuHoverHelper: {fileID: 1784804936}
+  searchInputField: {fileID: 652595842}
+  itemsContentObject: {fileID: 1388269558}
+  mainComponentImage: {fileID: 1090008073}
+  secondComponentImage: {fileID: 261139223}
+  thirdComponentImage: {fileID: 1813081249}
+  componentNameText: {fileID: 1431582086}
+  componentInfoScrollView: {fileID: 548778836}
+  componentAttributesScrollView: {fileID: 278548492}
+  componentInfoContent: {fileID: 1282895956}
+  componentAttributesContent: {fileID: 116653552}
+  selectButton: {fileID: 1272145378}
+  closeMenuButton: {fileID: 604904877}
+  menuHoverHelper: {fileID: 1784804936}
 --- !u!1 &1804064726
 GameObject:
   m_ObjectHideFlags: 0
@@ -8067,7 +8067,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -8354,7 +8354,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 15, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &2000465668
