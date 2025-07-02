@@ -21,4 +21,10 @@ public class DrawingItemStatusManager : MonoBehaviour
         DrawingItemImg.sprite = itemSprite;
         DrawModeImg.sprite = isDrawing ? DrawingSprite : WaitingSprite;
     }
+
+    /// <summary>
+    /// Çizim modunu ayarlar
+    /// </summary>
+    /// <param name="isDrawing">Çizim modu</param>
+    public void SetDrawMode(bool isDrawing) => DrawModeImg.sprite = isDrawing ? DrawingSprite : WaitingSprite;
 }
