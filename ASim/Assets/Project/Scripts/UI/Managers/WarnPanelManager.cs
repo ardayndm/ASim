@@ -13,7 +13,14 @@ public class WarnPanelManager : MonoBehaviour
     [SerializeField] private Button OkButton;
     [SerializeField] private Button CancelButton;
 
+    /// <summary>
+    /// Uyarı mesajının ok butonuna tıklandıgında tetiklenen event. (GameObject Disable olunca abonelikler silinir.)
+    /// </summary>
     public event Action OkButtonClicked;
+
+    /// <summary>
+    /// Uyarı mesajının iptal butonuna tıklandıgında tetiklenen event. (GameObject Disable olunca abonelikler silinir.)
+    /// </summary>
     public event Action CancelButtonClicked;
 
     private void Start()
@@ -31,6 +38,13 @@ public class WarnPanelManager : MonoBehaviour
             CancelButtonClicked?.Invoke();
             CameraManager.UnlockCamera(gameObject, this);
         });
+    }
+
+    void OnDisable()
+    {
+        // Abonelerini temizle
+        OkButtonClicked = null;
+        CancelButtonClicked = null;
     }
 
     /// <summary>

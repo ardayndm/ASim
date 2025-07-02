@@ -58,27 +58,12 @@ public class SimulationManager : MonoBehaviour
     {
         WarnPanel.gameObject.SetActive(true);
         WarnPanel.SetWarnText("Tüm şema silinecektir. Devam etmek istiyor musunuz?");
-        WarnPanel.OkButtonClicked += ClearSchema;
-        WarnPanel.CancelButtonClicked += CancelClearSchema;
-    }
-
-    private void ClearSchema()
-    {
-        SchemaManager.ClearAllSchema();
-        UnsubscribeWarnPanel();
-        WarnPanel.gameObject.SetActive(false);
-    }
-
-    private void CancelClearSchema()
-    {
-        UnsubscribeWarnPanel();
-        WarnPanel.gameObject.SetActive(false);
-    }
-
-    private void UnsubscribeWarnPanel()
-    {
-        WarnPanel.OkButtonClicked -= ClearSchema;
-        WarnPanel.CancelButtonClicked -= CancelClearSchema;
+        WarnPanel.OkButtonClicked += () =>
+        {
+            SchemaManager.ClearAllSchema();
+            WarnPanel.gameObject.SetActive(false);
+        };
+        WarnPanel.CancelButtonClicked += () => WarnPanel.gameObject.SetActive(false);
     }
 
     private void UpdateUIState()

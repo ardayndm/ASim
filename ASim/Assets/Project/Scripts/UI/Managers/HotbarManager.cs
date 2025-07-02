@@ -14,6 +14,7 @@ public class HotbarManager : MonoBehaviour
     public GameObject HotbarItemsContentObject;
     public Button ClearHotbarButton;
     public GameObject HotbarItemPrefab;
+    public WarnPanelManager WarnPanelManager;
     public UIHoverHelper HotbarPanelHoverHelper;
 
     /// <summary>Aktif hotbar item listesi.</summary>
@@ -22,9 +23,21 @@ public class HotbarManager : MonoBehaviour
     private void Start()
     {
         SimulationManager.OnSimStateChanged += OnSimulationStateChanged;
-        ClearHotbarButton.onClick.AddListener(ClearHotbar);
+        ClearHotbarButton.onClick.AddListener(OnClearButtonClick);
         HotbarPanelHoverHelper.OnHovered += () => CameraManager.LockCamera(gameObject, this);
         HotbarPanelHoverHelper.OnHoverExit += () => CameraManager.UnlockCamera(gameObject, this);
+    }
+
+    private void OnClearButtonClick()
+    {
+        WarnPanelManager.gameObject.SetActive(true);
+        WarnPanelManager.SetWarnText("Hotbar temizlenecektir. Devam etmek istiyor musunuz?");
+        WarnPanelManager.OkButtonClicked += () =>
+        {
+            ClearHotbar();
+            WarnPanelManager.gameObject.SetActive(false);
+        };
+        WarnPanelManager.CancelButtonClicked += () => WarnPanelManager.gameObject.SetActive(false);
     }
 
     private void OnSimulationStateChanged(SimulationState state)
