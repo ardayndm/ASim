@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CameraManager : MonoBehaviour
 {
+    public static CameraManager Instance { get; private set; }
+
     [Header("Camera")]
     [SerializeField] private Camera mainCamera;
 
@@ -23,12 +25,19 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Scrollbar zoomScrollbar;
     [SerializeField] private UIHoverHelper hoverHelper;
 
-    private Vector3 dragOrigin;
+    private Vector3 m_dragOrigin;
 
     /// <summary>Kamerayı kilitleyen objeleri tutar.</summary>
     public static List<CameraLocker> LockCameraList { get; private set; } = new();
 
+    private void Awake() => Instance = this;
+    
     private void Start()
+    {
+        InitEvents();
+    }
+
+    void InitEvents()
     {
         hoverHelper.OnHovered += () => LockCamera(gameObject, this);
         hoverHelper.OnHoverExit += () => UnlockCamera(gameObject, this);
@@ -47,8 +56,6 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (mainCamera == null) return;
-
         UpdateZoomUI();
 
         if (LockCameraList.Count > 0) return;
@@ -57,20 +64,9 @@ public class CameraManager : MonoBehaviour
         HandleMouseWheelZoom();
     }
 
-    private void AdjustZoom(float delta)
-    {
-        SetZoom(mainCamera.orthographicSize + delta);
-    }
-
-    private void SetZoom(float zoom)
-    {
-        mainCamera.orthographicSize = Mathf.Clamp(zoom, minZoom, maxZoom);
-    }
-
-    private void ResetPosition()
-    {
-        mainCamera.transform.position = new Vector3(0, 0, -1);
-    }
+    private void AdjustZoom(float delta) => SetZoom(mainCamera.orthographicSize + delta);
+    private void SetZoom(float zoom) => mainCamera.orthographicSize = Mathf.Clamp(zoom, minZoom, maxZoom);
+    private void ResetPosition() => mainCamera.transform.position = new Vector3(0, 0, -1);
 
     private void UpdateZoomUI()
     {
@@ -91,11 +87,11 @@ public class CameraManager : MonoBehaviour
         var scrollPress = InputActionManager.InputActionsMap.Mouse.MouseScrollPress;
 
         if (scrollPress.WasPressedThisFrame())
-            dragOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            m_dragOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
         if (scrollPress.IsPressed())
         {
-            Vector3 delta = dragOrigin - mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 delta = m_dragOrigin - mainCamera.ScreenToWorldPoint(Input.mousePosition);
             mainCamera.transform.position += delta;
         }
     }

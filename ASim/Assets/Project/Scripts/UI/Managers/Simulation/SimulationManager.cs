@@ -2,75 +2,48 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Simülasyon panelini yönetir: başlat, durdur, şema temizle, menü aç.
-/// </summary>
 public class SimulationManager : MonoBehaviour
 {
-    [Header("UI Butonları")]
-    public Button PlaySimButton;
-    public Button StopSimButton;
-    public Button ComponentsMenuButton;
-    public Button ClearSchemaButton;
+    public static SimulationManager Instance { get; private set; }
+    public SimState State { get; private set; } = SimState.Stopped;
+    public event Action<SimState> OnSimStateChanged;
 
-    [Header("Bileşenler")]
-    public GameObject ComponentsMenuObject;
-    public UIHoverHelper SimulationPanelHoverHelper;
+    [SerializeField] Button StartButton;
+    [SerializeField] Button StopButton;
+    [SerializeField] Button ComponentsButton;
+    [SerializeField] Button ClearSchemaButton;
+    [SerializeField] UIHoverHelper SimulationPanelHoverHelper;
 
-    public static SimulationState SimState { get; private set; } = SimulationState.Stopped;
-    public static Action<SimulationState> OnSimStateChanged;
+    private void Awake() => Instance = this;
 
     private void Start()
     {
-        PlaySimButton.onClick.AddListener(StartSimulation);
-        StopSimButton.onClick.AddListener(StopSimulation);
-        ComponentsMenuButton.onClick.AddListener(OpenComponentsMenu);
-        ClearSchemaButton.onClick.AddListener(ConfirmClearSchema);
-
-        SimulationPanelHoverHelper.OnHovered += () => CameraManager.LockCamera(gameObject, this);
-        SimulationPanelHoverHelper.OnHoverExit += () => CameraManager.UnlockCamera(gameObject, this);
-
-        UpdateUIState();
+        SetActiveButtons();
+        InitEvents();
     }
 
-    private void StartSimulation()
+    void InitEvents()
     {
-        SimState = SimulationState.Running;
-        OnSimStateChanged?.Invoke(SimState);
-        UpdateUIState();
-    }
-
-    private void StopSimulation()
-    {
-        SimState = SimulationState.Stopped;
-        OnSimStateChanged?.Invoke(SimState);
-        UpdateUIState();
-    }
-
-    private void OpenComponentsMenu()
-    {
-        ComponentsMenuObject.SetActive(true);
-    }
-
-    private void ConfirmClearSchema()
-    {
-        WarnPanelManager.Instance.gameObject.SetActive(true);
-        WarnPanelManager.Instance.SetWarnText("Tüm şema silinecektir. Devam etmek istiyor musunuz?");
-        WarnPanelManager.Instance.OkButtonClicked += () =>
+        StartButton.onClick.AddListener(() =>
         {
-            SchemaManager.Instance.ClearAllSchema();
-            WarnPanelManager.Instance.gameObject.SetActive(false);
-        };
-        WarnPanelManager.Instance.CancelButtonClicked += () => WarnPanelManager.Instance.gameObject.SetActive(false);
+            State = SimState.Running;
+            OnSimStateChanged?.Invoke(State);
+            SetActiveButtons();
+        });
+
+        StopButton.onClick.AddListener(() =>
+        {
+            State = SimState.Stopped;
+            OnSimStateChanged?.Invoke(State);
+            SetActiveButtons();
+        });
     }
 
-    private void UpdateUIState()
+    private void SetActiveButtons()
     {
-        bool isRunning = SimState == SimulationState.Running;
-
-        PlaySimButton.interactable = !isRunning;
-        StopSimButton.interactable = isRunning;
-        ComponentsMenuButton.interactable = !isRunning;
-        ClearSchemaButton.interactable = !isRunning;
+        StartButton.interactable = State == SimState.Stopped;
+        StopButton.interactable = State == SimState.Running;
+        ComponentsButton.interactable = State == SimState.Stopped;
+        ClearSchemaButton.interactable = State == SimState.Stopped;
     }
 }
